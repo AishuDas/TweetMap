@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <style>
+        html { height: 100% }
+        body { height: 100%; margin: 0px; padding: 0px ; background-image: photo2.png}
+#container { width: 100%; height: 100% }
+#nav { z-index: 100; position: absolute;
+
+       padding: 5px;
+position:fixed;
+  bottom:10%;
+  left:0;
+  width:<fixed px>;
+  height:<fixed px>;	   }
+#map { width: 100%; height: 75% }
+h3 {
+    text-align: center;
+}
+
+    </style>
+      {% load static %}
+  </head>
+  <body>
+  <div id="container">
+    
+
+    <div id="nav"   >
+	
+	<h3 >TweetMap</h3>
+	
+	    <form id="listform" method="POST">{% csrf_token %}
+        <select name="ddlSearchWords" class="form-control" id="ddlSearchWords">
+            <option value="elections" selected>elections</option>
+            <option value="trump">trump</option>
+            <option value="modi">modi</option>
+            <option value="logan">logan</option>
+            <option value="football">football</option>
+            <option value="facebook">facebook</option>
+            <option value="india">india</option>
+            <option value="news">news</option>
+            <option value="oscars">oscars</option>
+            <option value="acchedin">acchedin</option>
+        </select>
+		<br>
+		<div style="position:absolute;vertical-align:middle;text-align:center;">
+        <button type="submit"  class="btn btn-primary" style="width:190px" onsubmit="initMap()">Submit</button>
+		</div>
+        </form>
+		
+    </div>
+	
+    <div id="map">
+	</div>
+	
+	</div>
+    <script>
+	function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+        function initMap() {
+            var uluru = {lat: 0, lng: 0};
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 2,
+                center: uluru
+            });
+
+            {#---Ajax---#}
+
+            $('#listform').on('submit', function (event) {
+                event.preventDefault();
+                var selectedword = document.getElementById("ddlSearchWords");
+            searchKeyword = selectedword.options[selectedword.selectedIndex].value;
+            console.log(searchKeyword);
+                $.ajax({
+                    url: '/post/',
+                    type: 'POST',
+                    data: {Search: searchKeyword, csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()},
+
+                    success: function (json) {
+                        var map = new google.maps.Map(document.getElementById('map'), {
+                            zoom: 2,
+                            center:uluru
+
+                        });
+
+                        console.log(json);
+                        console.log(json.length);
+                        console.log(json.coordinates)
+                        for(i=0; i<json.length.hits; i++){
+                            console.log(json.coordinates[i].lat);
+                            console.log(json.coordinates[i].lng);
+                            var myLatlng = new google.maps.LatLng(parseFloat(json.coordinates[i].lat),parseFloat(json.coordinates[i].lng));
+                            console.log(myLatlng);
+                            var marker = new google.maps.Marker({
+                                map: map,
+                                position: myLatlng
+
+                            })
+                        }
+
+                    }
+                });
+            });
+        }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUKeDO4WiUA24mp60G1AFPJRjandfPX5Q&callback=initMap">
+    </script>
+  </body>
+</html>
+
