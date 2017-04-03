@@ -10,11 +10,11 @@ import cgi
 import sys
 
 
-ckey="oQ2AyNZY2pOj7eZhmeMnPWl0t"  
-csecret="BXoJkxMvlG5l73NTrcojclMZqljugEQJFnsQO2pMN69HIW0vCK"
+ckey=""  
+csecret=""
 
-atoken="416868353-RHo8NNvT1Jyy71gQQfu5tH95h8mCvx1LJUkv88mb"  
-atoken_secret="dinDhf13RlCHHuQZA983LOy102VOWm3bXjhzqkBHnFFF4"
+atoken=""  
+atoken_secret=""
 
 
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
     #This handles AWS ES authentication
     host = 'search-tweetmap-3irxvi2quadmyikuw2vh6227rq.us-east-1.es.amazonaws.com'
-    awsauthentication = AWS4Auth('AKIAJTBAXPOSWN733BIA', 'NZAQX0vBV541SNWsewaRSUKtOa1yTps1DToo5VpJ', 'us-east-1', 'es')
+    awsauthentication = AWS4Auth('', '', 'us-east-1', 'es')
 
 
 
